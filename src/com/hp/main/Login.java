@@ -11,6 +11,12 @@ import net.miginfocom.swing.MigLayout;
 import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
 
@@ -27,7 +33,42 @@ public class Login extends javax.swing.JFrame {
         initComponents();
         init();
     }
+     private void login(String username, String password) {
+        String url = "jdbc:sqlserver://localhost:1433;databaseName=YourDatabaseName";
+        String dbUsername = "your_db_username";
+        String dbPassword = "your_db_password";
 
+        try (Connection conn = DriverManager.getConnection(url, dbUsername, dbPassword)) {
+            String sql = "SELECT * FROM Users WHERE Username = ? AND Password = ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                String user = rs.getString("Username");
+                String position = rs.getString("Position");
+
+                // Mở MainForm và truyền thông tin người dùng
+                MainForm mainForm = new MainForm();
+                mainForm.setUserInfo(user, position);
+                mainForm.setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid username or password");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Phương thức xử lý sự kiện đăng nhập
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
+        String username = txtEmail.getText();
+        String password = new String(txtPass.getPassword());
+
+        login(username, password);
+    }
     private void init() {
         layout = new MigLayout("fill, insets 0");
         cover = new PanelCover();
