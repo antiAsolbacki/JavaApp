@@ -28,7 +28,7 @@ Java là một ngôn ngữ lập trình hướng đối tượng, phổ biến t
 2. Cài đặt **NetBean** hoặc một IDE hỗ trợ Java.
 3. Clone repository của dự án:
    ```sh
-   git clone https://github.com/your-repo/hr-management-java.git
+   git clone https://github.com/antiAsolbacki/JavaApp
    ```
 4. Mở dự án bằng IntelliJ IDEA.
 5. Cấu hình kết nối cơ sở dữ liệu trong file `config.properties`.
